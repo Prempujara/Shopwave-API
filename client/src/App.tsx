@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { apiFetch, setStoredToken, getStoredToken } from './services/api';
 import type { User, Product, Cart, Order } from './types';
 import {
@@ -14,7 +15,10 @@ import {
   Sparkles,
   LogOut,
   ExternalLink,
-  ArrowRight
+  ArrowRight,
+  Lock,
+  Database,
+  Zap
 } from 'lucide-react';
 import './App.css';
 
@@ -66,6 +70,15 @@ export const App: React.FC = () => {
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#6366f1', '#a855f7', '#ec4899', '#06b6d4']
+    });
   };
 
   // Check existing token on mount
@@ -209,7 +222,8 @@ export const App: React.FC = () => {
         setAuthEmail('');
         setAuthPassword('');
         setAuthName('');
-        showToast(`Welcome back, ${res.data.user.name}!`);
+        showToast(`Welcome, ${res.data.user.name}! 🚀`);
+        triggerConfetti();
       }
     } catch (err: any) {
       setAuthError(err.message);
@@ -236,7 +250,7 @@ export const App: React.FC = () => {
       });
       if (res.success) {
         setCart(res.data.cart);
-        showToast('Item added to cart! 🛒');
+        showToast('Added to cart! 🛒');
       }
     } catch (err: any) {
       showToast(`Error: ${err.message}`);
@@ -288,7 +302,8 @@ export const App: React.FC = () => {
       });
       if (res.success) {
         setCart({ items: [], totalItems: 0, subtotal: 0 });
-        showToast('🎉 Order placed successfully! Stock was updated.');
+        triggerConfetti();
+        showToast('🎉 Order placed successfully! Stock was deducted.');
         setActiveTab('orders');
         fetchOrders();
       }
@@ -315,7 +330,7 @@ export const App: React.FC = () => {
       });
 
       if (res.success) {
-        setAdminMessage('Product added to live catalog successfully!');
+        setAdminMessage('Product published to live catalog successfully!');
         setNewProdName('');
         setNewProdDesc('');
         setNewProdPrice(99.99);
@@ -323,6 +338,7 @@ export const App: React.FC = () => {
         setNewProdImage('');
         fetchProducts();
         fetchCategories();
+        triggerConfetti();
         setTimeout(() => setAdminMessage(null), 3000);
       }
     } catch (err: any) {
@@ -345,19 +361,24 @@ export const App: React.FC = () => {
 
   return (
     <div className="app-container">
-      {/* Toast banner */}
-      {toastMessage && <div className="toast-banner animate-fade-in">{toastMessage}</div>}
+      {/* Toast Notification Banner */}
+      {toastMessage && (
+        <div className="toast-banner animate-fade-in">
+          <Zap size={18} color="#ec4899" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
-      {/* Navigation Header */}
+      {/* Modern Cybernetic Navigation Header */}
       <header className="navbar glass-nav">
         <div className="navbar-inner">
           <div className="nav-brand" onClick={() => setActiveTab('store')}>
-            <div className="brand-icon">
+            <div className="brand-icon-wrapper">
               <Sparkles size={22} color="#fff" />
             </div>
             <div className="brand-text">
               <span className="brand-title">SHOPWAVE</span>
-              <span className="brand-badge">REST API & STORE</span>
+              <span className="brand-badge">HIGH-PERFORMANCE CORE</span>
             </div>
           </div>
 
@@ -414,7 +435,7 @@ export const App: React.FC = () => {
               title="Open Interactive Swagger OpenAPI Playground"
             >
               <Layers size={18} />
-              <span>API Docs</span>
+              <span>Swagger API</span>
               <ExternalLink size={13} style={{ marginLeft: 4 }} />
             </a>
           </nav>
@@ -468,19 +489,18 @@ export const App: React.FC = () => {
         {/* VIEW 1: STORE FRONT */}
         {activeTab === 'store' && (
           <div className="store-view animate-fade-in">
-            {/* Hero Showcase */}
-            <section className="hero-banner">
-              <div className="hero-content">
+            {/* 3D Visual Hero Stage */}
+            <section className="hero-stage">
+              <div className="hero-stage-content">
                 <div className="hero-pill">
-                  <Sparkles size={14} /> Production Node.js & TypeScript Architecture
+                  <Sparkles size={14} color="#a855f7" /> Production Node.js & TypeScript API Architecture
                 </div>
                 <h1 className="hero-headline">
-                  High-Performance E-Commerce <br />
-                  <span className="text-gradient">Engineered for Scale.</span>
+                  Next-Gen E-Commerce <br />
+                  <span className="text-gradient">Engineered for Velocity.</span>
                 </h1>
                 <p className="hero-subtext">
-                  Featuring JWT authentication, role-based security, Zod schema validation,
-                  inventory checks, and full Swagger OpenAPI documentation.
+                  A high-throughput backend architecture featuring JWT authentication, role-based security, Zod schema validation, real-time stock deductions, and live OpenAPI documentation.
                 </p>
                 <div className="hero-actions">
                   <button
@@ -498,27 +518,63 @@ export const App: React.FC = () => {
                     rel="noreferrer"
                     className="btn-outline-large"
                   >
-                    View Swagger Spec <ExternalLink size={16} />
+                    API Documentation <ExternalLink size={16} />
                   </a>
                 </div>
               </div>
 
-              {/* Quick Architecture Feature Badges */}
-              <div className="hero-stats glass-panel">
-                <div className="stat-card">
-                  <div className="stat-icon">🛡️</div>
-                  <div className="stat-title">Role-Based Auth</div>
-                  <div className="stat-desc">JWT + bcrypt + RBAC middleware</div>
+              {/* Bespoke 3D Artwork Container */}
+              <div className="hero-visual-wrapper">
+                <div className="hero-art-container animate-float">
+                  <img
+                    src="/hero_art.jpg"
+                    alt="Cybernetic Digital Commerce Prism"
+                    className="hero-art-img"
+                  />
+                  <div className="art-floating-chip">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className="chip-status-dot"></span>
+                      <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fff' }}>
+                        API Engine Live & Healthy
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '0.75rem', color: '#a855f7', fontFamily: 'var(--font-mono)' }}>
+                      v1.0.0 TS
+                    </span>
+                  </div>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">⚡</div>
-                  <div className="stat-title">Real-Time Stock</div>
-                  <div className="stat-desc">Atomic inventory deduction</div>
+              </div>
+            </section>
+
+            {/* Architecture Highlights Ribbon */}
+            <section className="features-ribbon glass-panel">
+              <div className="feature-tile">
+                <div className="feature-icon-box">
+                  <Lock size={22} />
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">🔍</div>
-                  <div className="stat-title">Full Search & Filter</div>
-                  <div className="stat-desc">Mongoose text indexes & pagination</div>
+                <div>
+                  <div className="feature-title">Role-Based Security</div>
+                  <div className="feature-desc">JWT authentication, bcryptjs salt rounds, and granular user/admin RBAC.</div>
+                </div>
+              </div>
+
+              <div className="feature-tile">
+                <div className="feature-icon-box" style={{ background: 'rgba(236, 72, 153, 0.12)', borderColor: 'rgba(236, 72, 153, 0.3)', color: '#f472b6' }}>
+                  <Zap size={22} />
+                </div>
+                <div>
+                  <div className="feature-title">Atomic Inventory</div>
+                  <div className="feature-desc">Cart-to-order pipeline with stock validations and immediate inventory reduction.</div>
+                </div>
+              </div>
+
+              <div className="feature-tile">
+                <div className="feature-icon-box" style={{ background: 'rgba(6, 182, 212, 0.12)', borderColor: 'rgba(6, 182, 212, 0.3)', color: '#22d3ee' }}>
+                  <Database size={22} />
+                </div>
+                <div>
+                  <div className="feature-title">Optimized Querying</div>
+                  <div className="feature-desc">Mongoose text indexes for fast search, category filtering, and clean pagination.</div>
                 </div>
               </div>
             </section>
@@ -575,7 +631,7 @@ export const App: React.FC = () => {
               {loadingProducts ? (
                 <div className="loading-state">
                   <div className="spinner"></div>
-                  <p>Querying Shopwave API catalog...</p>
+                  <p>Querying Shopwave catalog...</p>
                 </div>
               ) : products.length === 0 ? (
                 <div className="empty-state glass-panel">
@@ -671,31 +727,31 @@ export const App: React.FC = () => {
         {activeTab === 'cart' && (
           <div className="cart-view animate-fade-in">
             <h2 className="view-title">
-              <ShoppingCart size={24} /> Your Shopping Cart
+              <ShoppingCart size={28} /> Shopping Cart
             </h2>
 
             {!currentUser ? (
               <div className="empty-state glass-panel">
-                <UserIcon size={48} className="empty-icon" />
+                <UserIcon size={52} className="empty-icon" />
                 <h3>Authentication Required</h3>
                 <p>Sign in or register an account to view and persist your cart items.</p>
                 <button
                   className="btn-primary"
                   onClick={() => setAuthModalOpen(true)}
-                  style={{ marginTop: 16 }}
+                  style={{ marginTop: 18 }}
                 >
                   Sign In Now
                 </button>
               </div>
             ) : !cart || cart.items.length === 0 ? (
               <div className="empty-state glass-panel">
-                <ShoppingBag size={48} className="empty-icon" />
-                <h3>Your Cart is Currently Empty</h3>
-                <p>Browse our catalog and add items to begin ordering.</p>
+                <ShoppingBag size={52} className="empty-icon" />
+                <h3>Your Cart is Empty</h3>
+                <p>Explore our premium product catalog to add your desired items.</p>
                 <button
                   className="btn-primary"
                   onClick={() => setActiveTab('store')}
-                  style={{ marginTop: 16 }}
+                  style={{ marginTop: 18 }}
                 >
                   Return to Store
                 </button>
@@ -760,7 +816,7 @@ export const App: React.FC = () => {
                     <span>${cart.subtotal.toFixed(2)}</span>
                   </div>
                   <div className="summary-row">
-                    <span>Shipping</span>
+                    <span>Express Shipping</span>
                     <span className="text-free">FREE</span>
                   </div>
                   <div className="summary-row">
@@ -796,7 +852,7 @@ export const App: React.FC = () => {
         {activeTab === 'orders' && (
           <div className="orders-view animate-fade-in">
             <h2 className="view-title">
-              <Package size={24} /> Order History & Invoices
+              <Package size={28} /> Order History & Receipts
             </h2>
 
             {loadingOrders ? (
@@ -806,13 +862,13 @@ export const App: React.FC = () => {
               </div>
             ) : orders.length === 0 ? (
               <div className="empty-state glass-panel">
-                <Package size={48} className="empty-icon" />
+                <Package size={52} className="empty-icon" />
                 <h3>No orders placed yet</h3>
                 <p>When you checkout items from your cart, your order records will show here.</p>
                 <button
                   className="btn-primary"
                   onClick={() => setActiveTab('store')}
-                  style={{ marginTop: 16 }}
+                  style={{ marginTop: 18 }}
                 >
                   Start Shopping
                 </button>
@@ -830,7 +886,7 @@ export const App: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="order-status-badge status-processing">
+                      <div className="order-status-badge">
                         {order.status.toUpperCase()}
                       </div>
                     </div>
@@ -878,7 +934,7 @@ export const App: React.FC = () => {
         {activeTab === 'admin' && currentUser?.role === 'admin' && (
           <div className="admin-view animate-fade-in">
             <h2 className="view-title">
-              <ShieldCheck size={24} /> Admin Operations & Catalog Management
+              <ShieldCheck size={28} /> Admin Suite & Catalog Management
             </h2>
 
             {adminMessage && (
@@ -963,9 +1019,9 @@ export const App: React.FC = () => {
 
               {/* Active Admin Order Oversight */}
               <div className="admin-orders-card glass-panel">
-                <h3>Recent System-Wide Orders ({adminOrders.length})</h3>
+                <h3>System-Wide Orders ({adminOrders.length})</h3>
                 {adminOrders.length === 0 ? (
-                  <p className="dim-text">No store orders created yet.</p>
+                  <p style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>No store orders created yet.</p>
                 ) : (
                   <div className="admin-orders-table">
                     {adminOrders.map((o) => (
@@ -1060,7 +1116,7 @@ export const App: React.FC = () => {
 
             {/* Quick Demo Credentials Autofill */}
             <div className="demo-credentials-box">
-              <span className="demo-title">⚡ Quick Demo Logins:</span>
+              <span className="demo-title">⚡ Quick Demo Credentials:</span>
               <div className="demo-btn-group">
                 <button
                   type="button"
@@ -1071,7 +1127,7 @@ export const App: React.FC = () => {
                     setAuthPassword('AdminPassword123!');
                   }}
                 >
-                  Fill Admin Credentials
+                  Admin Login
                 </button>
                 <button
                   type="button"
@@ -1082,7 +1138,7 @@ export const App: React.FC = () => {
                     setAuthPassword('CustomerPassword123!');
                   }}
                 >
-                  Fill Customer Credentials
+                  Customer Login
                 </button>
               </div>
             </div>
